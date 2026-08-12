@@ -1,0 +1,81 @@
+.feedback-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 60px 20px;
+}
+
+.feedback-container {
+  max-width: 650px;
+  margin: auto;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.feedback-container h1 {
+  text-align: center;
+  color: #172033;
+  margin-bottom: 10px;
+}
+
+.feedback-container > p {
+  text-align: center;
+  color: #667085;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.feedback-container label {
+  display: block;
+  margin: 18px 0 8px;
+  font-weight: bold;
+  color: #344054;
+}
+
+.feedback-container input,
+.feedback-container select,
+.feedback-container textarea {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+.feedback-container input:focus,
+.feedback-container select:focus,
+.feedback-container textarea:focus {
+  border-color: #4f46e5;
+}
+
+.feedback-container textarea {
+  resize: vertical;
+}
+
+.feedback-container button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #4f46e5;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.feedback-container button:hover {
+  background: #3730a3;
+}
+
+.success-message {
+  background: #ecfdf3;
+  color: #027a48;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+}
