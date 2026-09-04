@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "seed": "tsx src/db/seed.ts",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "build:cf": "npx @cloudflare/next-on-pages"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.122.0",
@@ -30,6 +31,8 @@
     "zod": "^4.5.4"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "1.13.0",
+    "wrangler": "3.78.0",
     "@tailwindcss/postcss": "4.1.17",
     "@types/node": "22.19.15",
     "@types/pg": "8.18.0",
