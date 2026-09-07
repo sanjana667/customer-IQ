@@ -40,16 +40,17 @@ LOOP is a multi-tenant web application that ingests customer feedback, uses AI (
 ### Prerequisites
 - Node.js 18+
 - PostgreSQL database
-- Anthropic API key
+- Gemini API key
 
 ### Environment Variables
 
 Create a `.env` file:
 ```env
-DATABASE_URL=postgresql://user:password@host:5432/dbname
-NEXTAUTH_SECRET=your-super-secret-key
+DATABASE_URL=postgresql://user:password@host:5432/database
+NEXTAUTH_SECRET=your-nextauth-secret-here
 NEXTAUTH_URL=http://localhost:3000
-ANTHROPIC_API_KEY=sk-ant-...
+GEMINI_API_KEY=your-api-key-here
+GEMINI_MODEL=your-model-name-here
 ```
 
 ### Installation
@@ -138,3 +139,10 @@ src/
 
 ## 🚀 Deployment
 
+Deploy to Vercel:
+1. Push to GitHub
+2. Connect repo in Vercel dashboard
+3. Set environment variables
+4. Deploy!
+
+Or use Railway/Render for the PostgreSQL database.
