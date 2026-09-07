@@ -138,10 +138,3 @@ src/
 
 ## 🚀 Deployment
 
-Deploy to Vercel:
-1. Push to GitHub
-2. Connect repo in Vercel dashboard
-3. Set environment variables
-4. Deploy!
-
-Or use Railway/Render for the PostgreSQL database.
