@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Header from "@/components/layout/Header";
 import { sentimentColor, sentimentLabel, statusColor, truncate, formatDate } from "@/utils/helpers";
@@ -33,6 +33,7 @@ export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
@@ -60,24 +61,40 @@ export default function FeedbackPage() {
 
   const limit = 20;
 
-  const fetchFeedback = useCallback(async () => {
-    setLoading(true);
+  useEffect(() => {
+    const controller = new AbortController();
     const params = new URLSearchParams({ page: String(page), limit: String(limit) });
     if (filters.channel) params.set("channel", filters.channel);
     if (filters.sentiment) params.set("sentiment", filters.sentiment);
     if (filters.status) params.set("status", filters.status);
     if (filters.search) params.set("search", filters.search);
 
-    const res = await fetch(`/api/feedback?${params}`);
-    const data: FeedbackResponse = await res.json();
-    setFeedbacks(data.data ?? []);
-    setTotal(data.total ?? 0);
-    setLoading(false);
-  }, [page, filters]);
+    void fetch(`/api/feedback?${params}`, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to load feedback");
+        return response.json() as Promise<FeedbackResponse>;
+      })
+      .then((data) => {
+        setFeedbacks(data.data ?? []);
+        setTotal(data.total ?? 0);
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        console.error("Failed to load feedback:", error);
+        setFeedbacks([]);
+        setTotal(0);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
 
-  useEffect(() => {
-    fetchFeedback();
-  }, [fetchFeedback]);
+    return () => controller.abort();
+  }, [page, filters, refreshKey]);
+
+  function refreshFeedback() {
+    setLoading(true);
+    setRefreshKey((key) => key + 1);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -90,7 +107,7 @@ export default function FeedbackPage() {
     setNewFeedback({ content: "", channel: "support", customerLabel: "" });
     setShowForm(false);
     setSubmitting(false);
-    fetchFeedback();
+    refreshFeedback();
   }
 
   async function handleStatusChange(id: string, status: string) {
@@ -99,12 +116,12 @@ export default function FeedbackPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
-    fetchFeedback();
+    refreshFeedback();
   }
 
   async function handleClassify(id: string) {
     await fetch(`/api/feedback/${id}/classify`, { method: "POST" });
-    fetchFeedback();
+    refreshFeedback();
   }
 
   async function handleSimulate() {
@@ -112,7 +129,7 @@ export default function FeedbackPage() {
     const res = await fetch("/api/feedback/simulate", { method: "POST" });
     const data = await res.json();
     setSimulating(false);
-    fetchFeedback();
+    refreshFeedback();
     alert(`Simulated ${data.count} feedback items`);
   }
 
@@ -125,7 +142,7 @@ export default function FeedbackPage() {
     const result = await res.json();
     setUploadResult(result);
     setCsvFile(null);
-    fetchFeedback();
+    refreshFeedback();
   }
 
   const canEdit = session?.user?.role === "ADMIN" || session?.user?.role === "ANALYST";
