@@ -46,10 +46,10 @@ LOOP is a multi-tenant web application that ingests customer feedback, uses AI (
 
 Create a `.env` file:
 ```env
-DATABASE_URL=postgresql://user:password@host:5432/database
-NEXTAUTH_SECRET=your-nextauth-secret-here
+DATABASE_URL=<set-in-Netlify-or-local-env>
+NEXTAUTH_SECRET=<set-in-Netlify-or-local-env>
 NEXTAUTH_URL=http://localhost:3000
-GEMINI_API_KEY=your-api-key-here
+GEMINI_API_KEY=<set-in-Netlify-or-local-env>
 GEMINI_MODEL=your-model-name-here
 ```
 

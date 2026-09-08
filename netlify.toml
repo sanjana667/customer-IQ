@@ -7,3 +7,4 @@
 
 [build.environment]
   SECRETS_SCAN_OMIT_PATHS = ".netlify, node_modules"
+  SECRETS_SCAN_OMIT_KEYS = "GEMINI_MODEL"
