@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Add this line to make it compatible with Cloudflare
   output: "standalone",
-  // ... rest of your config
+  env: {
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'https://consumer-iq-01.netlify.app',
+  },
 };
 
 export default nextConfig;
